@@ -1,0 +1,102 @@
+row0 {
+    "NSColor": "0xCCCCCC"
+}
+
+row1 {
+    "NSBackgroundColor": "0xCCCCCC"
+}
+
+row2 {
+  "NSStrokeColor": "0xCCCCCC",
+  "NSStrokeWidth": 1.5
+}
+
+row3 {
+  "NSUnderlineColor": "0xFF0000",
+  "NSUnderline": true
+}
+
+row4 {
+  "NSStrikethroughColor": "0x00FF00",
+  "NSStrikethrough": true
+}
+
+row5 {
+  "NSShadow": {
+    "shadowColor": "0x00FF00",
+    "shadowOffsetX": 5.0,
+    "shadowOffsetY": 5.0,
+    "shadowBlurRadius": 2.5
+  }
+}
+
+row6 {
+  "NSKern": 5.0
+}
+
+row7 {
+  "NSTextEffect": "_UIKitNewLetterpressStyle"
+}
+
+row8 {
+  "NSLink": "http://www.apple.com"
+}
+
+row9 {
+  "NSBaselineOffset": 6.0
+}
+
+row10 {
+  "NSObliqueness": 2.0
+}
+
+row11 {
+  "NSExpansion": 0.5
+}
+
+row12 {
+  "NSFont": {
+    "fontName": "Zapfino",
+    "fontSize": 11
+  }
+}
+
+row13 {
+  "NSFont": {
+    "systemFontOfSize": 10
+  }
+}
+
+row14 {
+  "NSFont": {
+    "boldSystemFontOfSize": 18
+  }
+}
+
+row15 {
+  "NSFont": {
+    "italicSystemFontOfSize": 14
+  }
+}
+
+row16 {
+  "NSParagraphStyle": {
+    "alignment": "right"
+  }
+}
+
+red {
+  "NSColor": "0xFF0000"
+}
+
+rightalignedred : red {
+  "NSParagraphStyle": {
+    "alignment": "right"
+  }
+}
+
+inherited_row0 : rightalignedred {
+  "NSFont": {
+    "boldSystemFontOfSize": 10
+  }
+}

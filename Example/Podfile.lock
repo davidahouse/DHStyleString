@@ -1,0 +1,14 @@
+PODS:
+  - StyleString (0.1.0)
+
+DEPENDENCIES:
+  - StyleString (from `../`)
+
+EXTERNAL SOURCES:
+  StyleString:
+    :path: ../
+
+SPEC CHECKSUMS:
+  StyleString: f5ee8b19012340e0a0e9b7ce1834c0ab583d4e37
+
+COCOAPODS: 0.33.1
