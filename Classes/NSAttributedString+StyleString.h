@@ -34,6 +34,10 @@
 
 #pragma mark - Class Methods
 
++ (NSAttributedString *)SS_attributedString:(NSString *)inString style:(NSString *)style;
 + (NSAttributedString *)SS_attributedString:(NSString *)inString style:(NSString *)style stylespec:(NSString *)stylespec;
+
++ (NSAttributedString *)SS_attributedStrings:(NSArray *)inStrings styles:(NSArray *)styles stylespec:(NSString *)stylespec;
++ (NSAttributedString *)SS_attributedStrings:(NSArray *)inStrings styles:(NSArray *)styles;
 
 @end

@@ -11,6 +11,8 @@
 
 @interface ExamplesTableViewController ()
 
+@property (nonatomic,strong) UITableViewCell *sizingCell;
+
 @end
 
 @implementation ExamplesTableViewController
@@ -46,7 +48,7 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 2;
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -54,6 +56,9 @@
     // Return the number of rows in the section.
     if ( section == 0 ) {
         return 17;
+    }
+    else if ( section == 1 ) {
+        return 1;
     }
     else {
         return 1;
@@ -64,6 +69,9 @@
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
     
+    cell.textLabel.numberOfLines = 0;
+    cell.textLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    
     if ( indexPath.section == 0 ) {
         NSAttributedString *cellText = [self attributedTextForRow:indexPath.row];
         cell.textLabel.attributedText = cellText;
@@ -72,12 +80,39 @@
         NSAttributedString *cellText = [self attributedTextForInheritedRow:indexPath.row];
         cell.textLabel.attributedText = cellText;
     }
+    else {
+        NSAttributedString *cellText = [self attributedTextForMultiLineRow:indexPath.row];
+        cell.textLabel.attributedText = cellText;
+    }
+    
     return cell;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return [@[@"Basic Styles",@"Inherited Styles"] objectAtIndex:section];
+    return [@[@"Basic Styles",@"Inherited Styles",@"Multiline Styles"] objectAtIndex:section];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSAttributedString *cellText = nil;
+    if ( indexPath.section == 0 ) {
+        cellText = [self attributedTextForRow:indexPath.row];
+    }
+    else if ( indexPath.section == 1 ) {
+        cellText = [self attributedTextForInheritedRow:indexPath.row];
+    }
+    else {
+        cellText = [self attributedTextForMultiLineRow:indexPath.row];
+    }
+
+    if ( !self.sizingCell ) {
+        self.sizingCell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
+    }
+
+    CGSize maxSize = CGSizeMake(self.sizingCell.textLabel.frame.size.width, CGFLOAT_MAX);
+    CGRect formattedSize = [cellText boundingRectWithSize:maxSize options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) context:nil];
+    return (int)formattedSize.size.height + 17.0;
 }
 
 /*
@@ -137,6 +172,12 @@
 - (NSAttributedString *)attributedTextForInheritedRow:(int)row
 {
     return [NSAttributedString SS_attributedString:@"Your dog has fleas" style:[NSString stringWithFormat:@"inherited_row%d",row] stylespec:@"test"];
+}
+
+- (NSAttributedString *)attributedTextForMultiLineRow:(int)row
+{
+    return [NSAttributedString SS_attributedStrings:@[@"your dog",@"\nhas fleas"]
+                      styles:@[@"header1",@"body1"] stylespec:@"test"];
 }
 
 @end

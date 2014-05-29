@@ -100,3 +100,19 @@ inherited_row0 : rightalignedred {
     "boldSystemFontOfSize": 10
   }
 }
+
+header1 {
+    "NSFont": {
+        "boldSystemFontOfSize": 24
+    },
+    "NSColor": "0x0000FF"
+}
+
+body1 {
+    "NSFont": {
+        "italicSystemFontOfSize": 12
+    },
+    "NSColor": "0x1bFF1b"
+}
+
+

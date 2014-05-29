@@ -31,6 +31,19 @@
 
 #pragma mark - Class Methods
 
++ (NSAttributedString *)SS_attributedString:(NSString *)inString style:(NSString *)style
+{
+    // Search all the bundles for the file
+    for ( NSBundle *bundle in [NSBundle allBundles] ) {
+        
+        NSArray *specFiles = [bundle pathsForResourcesOfType:@"stylespec" inDirectory:nil];
+        if ( specFiles && [specFiles count] > 0 ) {
+            return [self SS_attributedString:inString style:style stylespec:[specFiles[0] lastPathComponent] ];
+        }
+    }
+    return [[NSAttributedString alloc] initWithString:inString];
+}
+
 + (NSAttributedString *)SS_attributedString:(NSString *)inString style:(NSString *)style stylespec:(NSString *)stylespec
 {
     // Load the style spec
@@ -44,6 +57,34 @@
     else {
         return [[NSAttributedString alloc] initWithString:inString];
     }
+}
+
++ (NSAttributedString *)SS_attributedStrings:(NSArray *)inStrings styles:(NSArray *)styles stylespec:(NSString *)stylespec
+{
+    if ( !inStrings || !styles || [inStrings count] != [styles count] ) {
+        return nil;
+    }
+    
+    NSMutableAttributedString *totalString = [[NSMutableAttributedString alloc] init];
+    
+    for ( int i = 0; i < [inStrings count]; i++ ) {
+        
+        [totalString appendAttributedString:[self SS_attributedString:inStrings[i] style:styles[i] stylespec:stylespec]];
+    }
+    return totalString;
+}
+
++ (NSAttributedString *)SS_attributedStrings:(NSArray *)inStrings styles:(NSArray *)styles
+{
+    // Search all the bundles for the file
+    for ( NSBundle *bundle in [NSBundle allBundles] ) {
+        
+        NSArray *specFiles = [bundle pathsForResourcesOfType:@"stylespec" inDirectory:nil];
+        if ( specFiles && [specFiles count] > 0 ) {
+            return [self SS_attributedStrings:inStrings styles:styles stylespec:[specFiles[0] lastPathComponent] ];
+        }
+    }
+    return nil;
 }
 
 @end
