@@ -59,6 +59,19 @@
     }
 }
 
++ (NSAttributedString *)SS_attributedStrings:(NSArray *)inStrings styles:(NSArray *)styles
+{
+    // Search all the bundles for the file
+    for ( NSBundle *bundle in [NSBundle allBundles] ) {
+        
+        NSArray *specFiles = [bundle pathsForResourcesOfType:@"stylespec" inDirectory:nil];
+        if ( specFiles && [specFiles count] > 0 ) {
+            return [self SS_attributedStrings:inStrings styles:styles stylespec:[specFiles[0] lastPathComponent] ];
+        }
+    }
+    return nil;
+}
+
 + (NSAttributedString *)SS_attributedStrings:(NSArray *)inStrings styles:(NSArray *)styles stylespec:(NSString *)stylespec
 {
     if ( !inStrings || !styles || [inStrings count] != [styles count] ) {
@@ -72,19 +85,6 @@
         [totalString appendAttributedString:[self SS_attributedString:inStrings[i] style:styles[i] stylespec:stylespec]];
     }
     return totalString;
-}
-
-+ (NSAttributedString *)SS_attributedStrings:(NSArray *)inStrings styles:(NSArray *)styles
-{
-    // Search all the bundles for the file
-    for ( NSBundle *bundle in [NSBundle allBundles] ) {
-        
-        NSArray *specFiles = [bundle pathsForResourcesOfType:@"stylespec" inDirectory:nil];
-        if ( specFiles && [specFiles count] > 0 ) {
-            return [self SS_attributedStrings:inStrings styles:styles stylespec:[specFiles[0] lastPathComponent] ];
-        }
-    }
-    return nil;
 }
 
 @end
