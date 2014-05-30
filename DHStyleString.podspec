@@ -1,5 +1,5 @@
 Pod::Spec.new do |s|
-  s.name             = "StyleString"
+  s.name             = "DHStyleString"
   s.version          = "0.1.0"
   s.summary          = "An easy way to created styled NSAttributedString objects."
   s.description      = <<-DESC
@@ -9,10 +9,10 @@ Pod::Spec.new do |s|
                        Much easier than trying to create all of the style dictionaries
                        by hand.
                        DESC
-  s.homepage         = "http://github.com/davidahouse/StyleString"
+  s.homepage         = "http://github.com/davidahouse/DHStyleString"
   s.license          = 'MIT'
   s.author           = { "David House" => "davidahouse@gmail.com" }
-  s.source           = { :git => "https://github.com/davidahouse/StyleString.git", :tag => s.version.to_s }
+  s.source           = { :git => "https://github.com/davidahouse/DHStyleString.git", :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/davidahouse'
 
   s.platform     = :ios, '7.0'

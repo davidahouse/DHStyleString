@@ -3,4 +3,4 @@
 
 xcodeproj 'StyleStringExample/StyleStringExample.xcodeproj'
 
-pod "StyleString", :path => "../"
+pod "DHStyleString", :path => "../"

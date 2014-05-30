@@ -25,7 +25,7 @@
 //
 #import <Foundation/Foundation.h>
 
-@interface SSStyleSpec : NSObject
+@interface DHStyleSpec : NSObject
 
 #pragma mark - Initializer
 - (instancetype)initWithName:(NSString *)stylespecname;

@@ -24,10 +24,10 @@
 //  DEALINGS IN THE SOFTWARE.
 //
 
-#import "NSAttributedString+StyleString.h"
-#import "SSStyleSpec.h"
+#import "NSAttributedString+DHStyleString.h"
+#import "DHStyleSpec.h"
 
-@implementation NSAttributedString (StyleString)
+@implementation NSAttributedString (DHStyleString)
 
 #pragma mark - Class Methods
 
@@ -47,7 +47,7 @@
 + (NSAttributedString *)SS_attributedString:(NSString *)inString style:(NSString *)style stylespec:(NSString *)stylespec
 {
     // Load the style spec
-    SSStyleSpec *spec = [[SSStyleSpec alloc] initWithName:stylespec];
+    DHStyleSpec *spec = [[DHStyleSpec alloc] initWithName:stylespec];
 
     // Calculate the attributes for this style
     NSDictionary *attributes = [spec attributesForStyle:style];

@@ -23,7 +23,7 @@
 //  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 //  DEALINGS IN THE SOFTWARE.
 //
-#import "SSStyleSpec.h"
+#import "DHStyleSpec.h"
 
 /**
  TODO: Improve the spec file format documentation
@@ -111,7 +111,7 @@
 */
 
 
-@interface SSStyleSpec()
+@interface DHStyleSpec()
 
 #pragma mark - Properties
 @property (nonatomic,strong) NSString *specFilePath;
@@ -119,7 +119,7 @@
 
 @end
 
-@implementation SSStyleSpec
+@implementation DHStyleSpec
 
 #pragma mark - Initializer
 - (instancetype)initWithName:(NSString *)stylespecname

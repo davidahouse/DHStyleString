@@ -30,7 +30,7 @@
  * Provides a set of methods that allow for easy construction of
  * NSAttributedString objects.
  */
-@interface NSAttributedString (StyleString)
+@interface NSAttributedString (DHStyleString)
 
 #pragma mark - Class Methods
 

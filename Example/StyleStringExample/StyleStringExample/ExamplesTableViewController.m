@@ -7,7 +7,7 @@
 //
 
 #import "ExamplesTableViewController.h"
-#import <NSAttributedString+StyleString.h>
+#import <NSAttributedString+DHStyleString.h>
 
 @interface ExamplesTableViewController ()
 

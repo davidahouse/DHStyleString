@@ -1,14 +1,14 @@
 PODS:
-  - StyleString (0.1.0)
+  - DHStyleString (0.1.0)
 
 DEPENDENCIES:
-  - StyleString (from `../`)
+  - DHStyleString (from `../`)
 
 EXTERNAL SOURCES:
-  StyleString:
+  DHStyleString:
     :path: ../
 
 SPEC CHECKSUMS:
-  StyleString: f5ee8b19012340e0a0e9b7ce1834c0ab583d4e37
+  DHStyleString: f1d25879351287564b6cb4471204c54f7e48efa1
 
 COCOAPODS: 0.33.1
