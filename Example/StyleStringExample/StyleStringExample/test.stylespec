@@ -115,4 +115,67 @@ body1 {
     "NSColor": "0x1bFF1b"
 }
 
+dynamic_row0 {
+    "NSFont": {
+        "preferredFontForTextStyle": "Headline"
+    }
+}
+
+dynamic_row1 {
+    "NSFont": {
+        "preferredFontForTextStyle": "SubheadLine"
+    }
+}
+
+dynamic_row2 {
+    "NSFont": {
+        "preferredFontForTextStyle": "Body"
+    }
+}
+
+dynamic_row3 {
+    "NSFont": {
+        "preferredFontForTextStyle": "Footnote"
+    }
+}
+
+dynamic_row4 {
+    "NSFont": {
+        "preferredFontForTextStyle": "Caption1"
+    }
+}
+
+dynamic_row5 {
+    "NSFont": {
+        "preferredFontForTextStyle": "Caption2"
+    }
+}
+
+child_style : noparent {
+    "NSFont": {
+        "boldSystemFontOfSize": "15"
+    }
+}
+
+indented {
+    "NSParagraphStyle": {
+        "headIndent": 6.0,
+        "firstLineHeadIndent": 6.0
+    }
+}
+
+italic {
+  "NSFont": {
+    "italicSystemFontOfSize": 14
+  }
+}
+
+body {
+    "NSFont": {
+        "systemFontOfSize": 14
+    }
+}
+
+
+
 

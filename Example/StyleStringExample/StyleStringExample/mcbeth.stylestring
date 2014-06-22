@@ -1,0 +1,10 @@
+start
+#{speaker:dynamic_row0}
+#{+indented}#{+body}I'll call upon you straight: abide within.#{-body}
+#{+italic}Exeunt Murderers#{-italic}
+
+#{+body}It is concluded. Banquo, thy soul's flight,
+If it find heaven, must find it out to-night.#{-body}
+#{+italic}Exit#{-italic}#{-indented}
+#{source}
+end

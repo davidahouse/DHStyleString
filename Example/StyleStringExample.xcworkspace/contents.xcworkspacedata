@@ -5,16 +5,16 @@
       location = "container:"
       name = "Classes">
       <FileRef
-         location = "group:../Classes/NSAttributedString+DHStyleString.h">
-      </FileRef>
-      <FileRef
-         location = "group:../Classes/NSAttributedString+DHStyleString.m">
-      </FileRef>
-      <FileRef
          location = "group:../Classes/DHStyleSpec.h">
       </FileRef>
       <FileRef
          location = "group:../Classes/DHStyleSpec.m">
+      </FileRef>
+      <FileRef
+         location = "group:../Classes/DHStyleString.h">
+      </FileRef>
+      <FileRef
+         location = "group:../Classes/DHStyleString.m">
       </FileRef>
    </Group>
    <FileRef

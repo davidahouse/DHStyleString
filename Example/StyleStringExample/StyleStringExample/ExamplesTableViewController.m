@@ -7,11 +7,13 @@
 //
 
 #import "ExamplesTableViewController.h"
-#import <NSAttributedString+DHStyleString.h>
+#import "DHStyleSpec.h"
+#import "DHStyleString.h"
 
 @interface ExamplesTableViewController ()
 
 @property (nonatomic,strong) UITableViewCell *sizingCell;
+@property (nonatomic,strong) DHStyleSpec *styleSpec;
 
 @end
 
@@ -29,6 +31,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.styleSpec = [[DHStyleSpec alloc] initWithName:@"test"];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dynamicTextChanged:) name:UIContentSizeCategoryDidChangeNotification object:nil];
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -48,7 +54,7 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 3;
+    return 4;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -60,8 +66,11 @@
     else if ( section == 1 ) {
         return 1;
     }
-    else {
+    else if ( section == 2 ) {
         return 1;
+    }
+    else {
+        return 6;
     }
 }
 
@@ -80,8 +89,12 @@
         NSAttributedString *cellText = [self attributedTextForInheritedRow:indexPath.row];
         cell.textLabel.attributedText = cellText;
     }
-    else {
+    else if ( indexPath.section == 2 ) {
         NSAttributedString *cellText = [self attributedTextForMultiLineRow:indexPath.row];
+        cell.textLabel.attributedText = cellText;
+    }
+    else {
+        NSAttributedString *cellText = [self attributedTextForDynamicRow:indexPath.row];
         cell.textLabel.attributedText = cellText;
     }
     
@@ -90,7 +103,7 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return [@[@"Basic Styles",@"Inherited Styles",@"Multiline Styles"] objectAtIndex:section];
+    return [@[@"Basic Styles",@"Inherited Styles",@"Multiline Styles",@"Dynamic Styles"] objectAtIndex:section];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -102,8 +115,11 @@
     else if ( indexPath.section == 1 ) {
         cellText = [self attributedTextForInheritedRow:indexPath.row];
     }
-    else {
+    else if ( indexPath.section == 2 ) {
         cellText = [self attributedTextForMultiLineRow:indexPath.row];
+    }
+    else {
+        cellText = [self attributedTextForDynamicRow:indexPath.row];
     }
 
     if ( !self.sizingCell ) {
@@ -115,69 +131,36 @@
     return (int)formattedSize.size.height + 17.0;
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+#pragma mark - Observer selectors
+- (void)dynamicTextChanged:(NSNotification *)notification
 {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
+    NSLog(@"VC got dynamic text message");
+    self.styleSpec = [[DHStyleSpec alloc] initWithName:@"test"];
+    [self.tableView reloadData];
 }
-*/
 
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
 
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+#pragma mark - Private Methods
 
 - (NSAttributedString *)attributedTextForRow:(int)row
 {
-    return [NSAttributedString SS_attributedString:@"Your dog has fleas" style:[NSString stringWithFormat:@"row%d",row] stylespec:@"test"];
+    return [self.styleSpec attributedString:@"Your dog has fleas" style:[NSString stringWithFormat:@"row%d",row]];
 }
 
 - (NSAttributedString *)attributedTextForInheritedRow:(int)row
 {
-    return [NSAttributedString SS_attributedString:@"Your dog has fleas" style:[NSString stringWithFormat:@"inherited_row%d",row] stylespec:@"test"];
+    return [self.styleSpec attributedString:@"Your dog has fleas" style:[NSString stringWithFormat:@"inherited_row%d",row]];
 }
 
 - (NSAttributedString *)attributedTextForMultiLineRow:(int)row
 {
-    return [NSAttributedString SS_attributedStrings:@[@"your dog",@"\nhas fleas"]
-                      styles:@[@"header1",@"body1"] stylespec:@"test"];
+    DHStyleString *styleString = [[DHStyleString alloc] initWithName:@"mcbeth"];
+    return [self.styleSpec attributedStringFromStyleString:styleString variables:@{@"speaker":@"MACBETH",@"source":@"source: http://shakespeare.mit.edu/macbeth"}];
+}
+
+- (NSAttributedString *)attributedTextForDynamicRow:(int)row
+{
+    return [self.styleSpec attributedString:@"Your dog has fleas" style:[NSString stringWithFormat:@"dynamic_row%d",row]];
 }
 
 @end

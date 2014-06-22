@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "DHStyleString"
-  s.version          = "0.1.0"
+  s.version          = "0.2.0"
   s.summary          = "An easy way to created styled NSAttributedString objects."
   s.description      = <<-DESC
                        Create a stylespec (similar to CSS) and then apply it to

@@ -1,6 +1,5 @@
 //
-//  SSStyleSpec.h
-//
+//  DHStyleSpec.h
 //
 //  Created by David House on 5/29/14.
 //  Copyright (c) 2014 David House <davidahouse@gmail.com>
@@ -24,6 +23,7 @@
 //  DEALINGS IN THE SOFTWARE.
 //
 #import "DHStyleSpec.h"
+#import "DHStyleString.h"
 
 /**
  TODO: Improve the spec file format documentation
@@ -134,6 +134,7 @@
                 _specFilePath = specFilePath;
             }
         }
+        [self parse];
     }
     return self;
 }
@@ -142,41 +143,56 @@
 - (NSDictionary *)styles
 {
     if ( !_styles ) {
-        
-        static NSMutableDictionary *staticCachedStyles = nil;
-        if ( !staticCachedStyles ) {
-            staticCachedStyles = [[NSMutableDictionary alloc] init];
-        }
-        
-        if ( staticCachedStyles[_specFilePath] ) {
-            _styles = staticCachedStyles[_specFilePath];
-        }
-        else {
-            [self parse];
-            staticCachedStyles[_specFilePath] = _styles;
-        }
+        _styles = [[NSMutableDictionary alloc] init];
     }
     return _styles;
 }
 
 #pragma mark - Public Methods
-- (NSDictionary *)attributesForStyle:(NSString *)style
+
+- (NSAttributedString *)attributedString:(NSString *)inString style:(NSString *)style
 {
-    NSDictionary *attr = [self.styles objectForKey:style];
-    if ( attr ) {
-        return attr;
+    NSDictionary *attributes = [self.styles objectForKey:style];
+    if ( attributes ) {
+        return [[NSAttributedString alloc] initWithString:inString attributes:attributes];
     }
     else {
-        return nil;
+        return [[NSAttributedString alloc] initWithString:inString];
     }
+}
+
+- (NSAttributedString *)attributedStringFromStyleString:(DHStyleString *)inStyleString variables:(NSDictionary *)variables
+{
+    NSMutableAttributedString *fullString = [[NSMutableAttributedString alloc] init];
+    
+    for ( NSDictionary *fragment in inStyleString.stringFragments ) {
+    
+        NSDictionary *attributes = @{};
+        for ( NSString *style in fragment[@"styleStack"] ) {
+            
+            if ( self.styles[style] ) {
+                attributes = [self combineAttributes:attributes with:self.styles[style]];
+            }
+        }
+    
+        if ( [fragment[@"kind"] isEqualToString:@"string"] ) {
+            NSAttributedString *partial = [[NSAttributedString alloc] initWithString:fragment[@"string"] attributes:attributes];
+            [fullString appendAttributedString:partial];
+        }
+        else if ( [fragment[@"kind"] isEqualToString:@"variable"] ) {
+            if ( variables[fragment[@"variable"]] ) {
+                NSAttributedString *partial = [[NSAttributedString alloc] initWithString:variables[fragment[@"variable"]] attributes:attributes];
+                [fullString appendAttributedString:partial];
+            }
+        }
+    }
+    return fullString;
 }
 
 #pragma mark - Private Methods
 - (void)parse
 {
     NSMutableDictionary *foundStyles = [[NSMutableDictionary alloc] init];
-    
-    NSLog(@"loading style from: %@",self.specFilePath);
     
     NSError *error = nil;
     NSString *styleFile = [NSString stringWithContentsOfFile:self.specFilePath encoding:NSUTF8StringEncoding error:&error];
@@ -234,12 +250,8 @@
         }
     }
 
-    NSLog(@"found styles: %@",foundStyles);
-    
     // Now we need to compute the final styles
     [self computeStylesFromRawSpec:foundStyles];
-    
-    NSLog(@"computed styles: %@",_styles);
 }
 
 - (void)computeStylesFromRawSpec:(NSDictionary *)foundStyles
@@ -259,6 +271,11 @@
 
 - (NSDictionary *)mergeAttributes:(NSDictionary *)attributes withParent:(NSString *)parent foundStyles:(NSDictionary *)foundStyles
 {
+    // if no parent, just return unmerged
+    if ( ![foundStyles objectForKey:parent] ) {
+        return attributes;
+    }
+    
     NSDictionary *parentAttributes = [self convertAttributeValues:[foundStyles objectForKey:parent][@"attributes"]];
     if ( ![[foundStyles objectForKey:parent][@"parent"] isEqualToString:@""] ) {
         parentAttributes = [self mergeAttributes:parentAttributes withParent:[foundStyles objectForKey:parent][@"parent"] foundStyles:foundStyles];
@@ -268,13 +285,15 @@
         return attributes;
     }
     
-    NSLog(@"trying to merge attributes: %@",attributes);
-    NSLog(@"with: %@",parentAttributes);
-    
+    return [self combineAttributes:attributes with:parentAttributes];
+}
+
+- (NSDictionary *)combineAttributes:(NSDictionary *)attributes with:(NSDictionary *)otherAttributes
+{
     NSMutableDictionary *mergedAttributes = [[NSMutableDictionary alloc] initWithDictionary:attributes copyItems:YES];
-    for ( id key in parentAttributes ) {
+    for ( id key in otherAttributes ) {
         if ( ![mergedAttributes objectForKey:key] ) {
-            [mergedAttributes setObject:[parentAttributes objectForKey:key] forKey:key];
+            [mergedAttributes setObject:[otherAttributes objectForKey:key] forKey:key];
         }
     }
     return mergedAttributes;
@@ -328,6 +347,29 @@
             else if ( fontDetails && fontDetails[@"italicSystemFontOfSize"] ) {
                 
                 UIFont *font = [UIFont italicSystemFontOfSize:[fontDetails[@"italicSystemFontOfSize"] floatValue]];
+                [finalAttributes setObject:font forKey:key];
+            }
+            else if ( fontDetails && fontDetails[@"preferredFontForTextStyle"] ) {
+
+                UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+                if ( [fontDetails[@"preferredFontForTextStyle"] isEqualToString:@"Headline"] ) {
+                    font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
+                }
+                else if ( [fontDetails[@"preferredFontForTextStyle"] isEqualToString:@"SubheadLine"] ) {
+                    font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
+                }
+                else if ( [fontDetails[@"preferredFontForTextStyle"] isEqualToString:@"Body"] ) {
+                    font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+                }
+                else if ( [fontDetails[@"preferredFontForTextStyle"] isEqualToString:@"Footnote"] ) {
+                    font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
+                }
+                else if ( [fontDetails[@"preferredFontForTextStyle"] isEqualToString:@"Caption1"] ) {
+                    font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
+                }
+                else if ( [fontDetails[@"preferredFontForTextStyle"] isEqualToString:@"Caption2"] ) {
+                    font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
+                }
                 [finalAttributes setObject:font forKey:key];
             }
         }
